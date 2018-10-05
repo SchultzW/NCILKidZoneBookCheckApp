@@ -58,73 +58,6 @@ namespace LinkCheckApp
 
             }
 
-
-            //GCDriver.Navigate().GoToUrl("https://improvingliteracy.org/kid-zone/read");
-            //bool worldCatFlag, googleFlag;
-            ////worldCatOutput.Text = ("");
-            ////googleOutputBox.Text = ("");
-            //titleCheck = inputTextBox.Text;
-            ////GCDriver = new ChromeDriver();
-            ////GCDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            ////GCDriver.Navigate().GoToUrl("https://improvingliteracy.org/kid-zone/read");
-            //try
-            //{
-            //    for (int i = 1; i <= 8; i++)
-            //    {
-            //        int count = i + 1;
-            //        System.Threading.Thread.Sleep(1000);
-            //        IList<IWebElement> allPageHref = GCDriver.FindElements(By.TagName("a"));
-            //        List<string> linkTitles = HrefParser(allPageHref);//returns list of strings with link titles
-            //        bool flag = IsBookPresent(linkTitles, titleCheck);
-            //        if (flag == true)
-            //            break;
-            //        else
-            //        {
-            //            GCDriver.FindElement(By.LinkText(count.ToString())).Click();
-
-
-            //            linkTitles.Clear();
-            //        }
-
-            //    }
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("The book could not be found.");
-            //}
-           
-            ////IList<IWebElement> allPageHref = GCDriver.FindElements(By.TagName("a"));
-            ////List<string>linkTitles = HrefParser(allPageHref);//returns list of strings with link titles
-         
-            //GoToPage(titleCheck);
-            //GCDriver.FindElement(By.LinkText("Find Book at Your Library")).Click();
-            //System.Threading.Thread.Sleep(6000);
-            ////checks if there is a title elment if there isnt it prints the name of the book. if it is it goes back.
-            ////worldCatFlag = WolrdCatCheck();
-            ////googleFlag = GoogleCheck();
-            ////if(worldCatFlag==true)
-            ////{
-            ////    worldCatOutput.Text=("WorldCat link check worked");
-            ////    worldCatOutput.ForeColor = Color.Green;
-            ////}
-            ////else
-            ////{
-            ////    worldCatOutput.Text = ("WorldCat link check faled");
-            ////    worldCatOutput.ForeColor = Color.Red;
-            ////}
-            ////googleFlag = GoogleCheck();
-            ////if (googleFlag == true)
-            ////{
-            ////    googleOutputBox.Text = ("GoogleBooks link check worked");
-            ////    googleOutputBox.ForeColor = Color.Green;
-            ////}
-            ////else
-            ////{
-            ////    googleOutputBox.Text = ("GoogleBooks link check faled");
-            ////    googleOutputBox.ForeColor = Color.Red;
-            ////}
-            ////GCDriver.Close();
-
         }
         public static List<string> HrefParser(IList<IWebElement> linksToCheck)
         {
@@ -170,13 +103,21 @@ namespace LinkCheckApp
 
 
         }
+        /// <summary>
+        /// checks if the book is present on the current page
+        /// </summary>
+        /// <param name="listToCheck"></param>
+        /// <param name="titleToCheck"></param>
+        /// <returns></returns>
         public static bool IsBookPresent(List<string>listToCheck, string titleToCheck)
         {
+
             //this method checks the page to see if the book title is present
             bool flag = false;
             foreach(string title in listToCheck)
             {
-                if (title == titleToCheck)
+                
+                if (title.Contains(titleToCheck))
                 {
                     flag = true;
                     break;
@@ -196,6 +137,10 @@ namespace LinkCheckApp
 
 
         }
+        /// <summary>
+        /// was to check the worldcar page but not being used at the moment
+        /// </summary>
+        /// <returns></returns>
         public static bool WolrdCatCheck()
         {
             //this should check the world cat page for a class title. it returns true if a book title is present
@@ -232,6 +177,10 @@ namespace LinkCheckApp
 
 
         }
+        /// <summary>
+        /// was to check the google page but not being used at the moment
+        /// </summary>
+        /// <returns></returns>
         public static bool GoogleCheck()
         {
             GCDriver.FindElement(By.ClassName("bookpreview")).Click();
@@ -267,12 +216,17 @@ namespace LinkCheckApp
                 return false;
             }
         }
+        /// <summary>
+        /// searches the read page for the title
+        /// </summary>
         public void SearchRead()
         {
             GCDriver.Navigate().GoToUrl("https://improvingliteracy.org/kid-zone/read");
             
             
             titleCheck = inputTextBox.Text;
+            titleCheck = StringChanger(titleCheck);
+            
             
             try
             {
@@ -310,6 +264,10 @@ namespace LinkCheckApp
             }
             
         }
+        /// <summary>
+        /// searches the listen page for the title
+        /// 
+        /// </summary>
         public void SearchListen()
         {
             GCDriver.Navigate().GoToUrl("https://improvingliteracy.org/kid-zone/listen");
@@ -351,6 +309,54 @@ namespace LinkCheckApp
             {
                 MessageBox.Show("The book could not be found.");
             }
+        }
+        /// <summary>
+        /// Takes a string and changes it to title font
+        /// </summary>
+        /// <param name="myString"></param>
+        /// <returns></returns>
+        public string StringChanger(string myString)
+        {
+            string newString="";
+            string workingString;
+        
+            string[] myStringArray = myString.Split(' ');
+             workingString = myStringArray[0];
+            //char[] charArray = workingString.ToCharArray();
+
+            char letter = workingString[0];
+            letter=char.ToUpper(letter);
+            newString.Remove(0, 0);
+            
+            newString=newString.Insert(0, letter.ToString());
+
+            //newString +=char.ToUpper(charArray[0]);
+            //foreach(char letter in charArray)
+            //{
+            //    newString += letter;
+            //}
+
+            for (int i = 1; i < myStringArray.Length; i++)
+            {
+                newString += " ";
+                if (myStringArray[i] == "in"| myStringArray[i]=="by"| myStringArray[i]=="the"| myStringArray[i]=="of"| myStringArray[i]=="at"| myStringArray[i]=="from"| myStringArray[i]=="and")
+                {
+                    newString += myStringArray[i];
+                }
+                else
+                {
+                    char[] charArray = myStringArray[i].ToCharArray();
+                    newString += char.ToUpper(charArray[0]);
+                    
+                    foreach (char aLetter in charArray.Skip<char>(1))
+                    {
+                        newString += aLetter;
+                    }
+                }
+            }
+            newString.Trim();
+            return newString;
+
         }
 
         private void closeBtn_Click(object sender, EventArgs e)
