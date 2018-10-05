@@ -12,9 +12,13 @@ using OpenQA.Selenium.Chrome;
 
 namespace LinkCheckApp
 {
-    public partial class Form1 : Form
+
+    public partial class LinkCheckForm : Form
     {
-        public Form1()
+        /// <summary>
+        /// Enter the title of the book your looking for exactly
+        /// </summary>
+        public LinkCheckForm()
         {
             InitializeComponent();
             GCDriver = new ChromeDriver();
@@ -181,6 +185,7 @@ namespace LinkCheckApp
                     flag = false;
             }
             return flag;
+            
 
 
         }

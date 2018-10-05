@@ -1,6 +1,6 @@
 ﻿namespace LinkCheckApp
 {
-    partial class Form1
+    partial class LinkCheckForm
     {
         /// <summary>
         /// Required designer variable.
